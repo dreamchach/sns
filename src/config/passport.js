@@ -6,6 +6,7 @@ const user = {
     passwortField : 'password'
 }
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+const KakaoStrategy = require('passport-kakao').Strategy
 
 const localStrategyConfig = new LocalStrategy(user, (email, password, done) => {
     User.findOne({email : email.toLocaleLowerCase()})
@@ -73,6 +74,31 @@ const googleStrategyConfig = new GoogleStrategy({
             if(error) return done(error)
         })
 })
+const kakaoStrategyConfig = new KakaoStrategy({
+    clientID : process.env.kakaoClientID,
+    callbackURL : '/auth/kakao/callback'
+}, (accessToken, refreshToken, profile, done) => {
+    User.findOne({kakaoId : profile.id})
+        .then((existingUser) => {
+            if(existingUser) return done(null, existingUser)
+            else {
+                const user = new User()
+
+                user.kakaoId = profile.id
+                user.email = profile._json.kakao_account.email
+                user.save()
+                    .then(() => {
+                        done(null, user)
+                    })
+                    .catch((error) => {
+                        if(error) return done(error)
+                    })
+            }
+        })
+        .catch((error) => {
+            if(error) return done(error)
+        })
+})
 
 passport.serializeUser((user, done) => {
     done(null, user.id)
@@ -86,3 +112,4 @@ passport.deserializeUser((id, done) => {
 
 passport.use('local', localStrategyConfig)
 passport.use('google', googleStrategyConfig)
+passport.use('kakao', kakaoStrategyConfig)

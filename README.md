@@ -87,3 +87,8 @@ app.use(function(request, response, next) {
 - npm run production과 같이 설정하면 production.json 의 구문이 적용됩니다
 
 ## 9. Router를 이용한 구조정리
+
+## 10. kakao OAuth 구현
+- kakao oauth 구현
+- 폴더 '카카오 OAuth 등록법' 참조
+- 카카오 mongoDB 연동
