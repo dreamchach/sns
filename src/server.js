@@ -86,6 +86,11 @@ app.post('/logout', (req, res, next) => {
         res.redirect('/login')
     })
 })
+app.get('/auth/google', passport.authenticate('google'))
+app.get('/auth/google/callback', passport.authenticate('google', {
+    successReturnToOrRedirect: '/',
+    failureRedirect : '/login'
+}))
 
 // mongoDB 연동
 mongoose.connect(process.env.mongoDB_URI)

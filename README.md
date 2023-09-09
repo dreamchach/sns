@@ -74,3 +74,9 @@ app.use(function(request, response, next) {
 
 ## 6. 비밀번호를 암호화하여 데이터베이스에 저장하는 방법
 - 비밀번호 암호화
+
+## 7. Google OAuth 구현
+- google oauth 구현
+1. 'https://console.cloud.google.com/'로 이동
+2. 폴더 '구글 OAuth 등록법' 참조
+- 구글과 mongoDB 연동

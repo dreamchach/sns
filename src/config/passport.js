@@ -5,18 +5,9 @@ const user = {
     usernameField : 'email',
     passwortField : 'password'
 }
+const GoogleStrategy = require('passport-google-oauth20').Strategy
 
-passport.serializeUser((user, done) => {
-    done(null, user.id)
-})
-passport.deserializeUser((id, done) => {
-    User.findById(id)
-        .then((user) => {
-            done(null, user)
-        })
-})
-
-passport.use('local', new LocalStrategy(user, (email, password, done) => {
+const localStrategyConfig = new LocalStrategy(user, (email, password, done) => {
     User.findOne({email : email.toLocaleLowerCase()})
     .then((user) => {
         if(!user) {
@@ -52,4 +43,46 @@ passport.use('local', new LocalStrategy(user, (email, password, done) => {
         })
     })
     */
-}))
+})
+const googleStrategyConfig = new GoogleStrategy({
+    clientID : process.env.googleClientID,
+    clientSecret : process.env.googleClientSecret,
+    callbackURL : '/auth/google/callback',
+    scope: ['email', 'profile']
+}, (accessToken, refreshToken, profile, done) => {
+    User.findOne({googleId : profile.id})
+        .then((existingUser) => {
+            if(existingUser) {
+                return done(null, existingUser)
+            } else {
+                const user = new User()
+                
+                user.email = profile.emails[0].value
+                user.googleId = profile.id
+                user.save()
+                    .then(() => {
+                        done(null, user)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        if(error) return done(error)
+                    })
+            }
+        })
+        .catch((error) => {
+            if(error) return done(error)
+        })
+})
+
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+passport.deserializeUser((id, done) => {
+    User.findById(id)
+        .then((user) => {
+            done(null, user)
+        })
+})
+
+passport.use('local', localStrategyConfig)
+passport.use('google', googleStrategyConfig)
