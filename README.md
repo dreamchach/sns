@@ -63,3 +63,7 @@ app.use(function(request, response, next) {
     next()
 })
 ```
+
+## 4. 인증을 위한 미들웨어 생성
+- 미들웨어를 통해 'Protected Route' 혹은 'Public Route'를 생성
+

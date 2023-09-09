@@ -6,6 +6,7 @@ const path = require('path')
 const User = require('./models/users.model')
 const passport = require('passport')
 const cookieSession = require('cookie-session')
+const { checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth')
 const cookieEncryptionKey = 'superSecret-key'
 
 // .env 파일 사용
@@ -46,13 +47,13 @@ app.set('view engine', 'ejs')
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
 // ejs파일들 렌더링
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login')
 })
-app.get('/signup', (req, res) => {
+app.get('/signup', checkNotAuthenticated, (req, res) => {
     res.render('signup')
 })
-app.get('/', (req, res) => {
+app.get('/', checkAuthenticated, (req, res) => {
     res.render('index')
 })
 
