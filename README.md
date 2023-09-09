@@ -67,3 +67,7 @@ app.use(function(request, response, next) {
 ## 4. 인증을 위한 미들웨어 생성
 - 미들웨어를 통해 'Protected Route' 혹은 'Public Route'를 생성
 
+
+## 5. 로그아웃 기능 만들기
+- 로그아웃 기능 생성
+- 로그아웃 시 passport에 내장된 함수로 인해 쿠키에 들어간 토큰 값이 변경됨
