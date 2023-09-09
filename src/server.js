@@ -3,9 +3,37 @@ const { default: mongoose } = require('mongoose')
 const app = express()
 const port = 4000
 const path = require('path')
+const User = require('./models/users.model')
+const passport = require('passport')
+const cookieSession = require('cookie-session')
+const cookieEncryptionKey = 'superSecret-key'
 
 // .env 파일 사용
 require('dotenv').config()
+
+// token 생성
+app.use(cookieSession({
+    keys : [cookieEncryptionKey]
+}))
+// register regenerate & save after the cookieSession middleware initialization
+app.use(function(request, response, next) {
+    if (request.session && !request.session.regenerate) {
+        request.session.regenerate = (cb) => {
+            cb()
+        }
+    }
+    if (request.session && !request.session.save) {
+        request.session.save = (cb) => {
+            cb()
+        }
+    }
+    next()
+})
+
+// passport 미들웨어에 등록
+app.use(passport.initialize())
+app.use(passport.session())
+require('./config/passport')
 
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
@@ -23,6 +51,33 @@ app.get('/login', (req, res) => {
 })
 app.get('/signup', (req, res) => {
     res.render('signup')
+})
+app.get('/', (req, res) => {
+    res.render('index')
+})
+
+// api 생성
+app.post('/signup', async(req, res) => {
+    console.log(req.body)
+    
+    const user = new User(req.body)
+    try {
+        await user.save()
+        return res.status(200).send('success')
+    } catch (error) {
+        console.log(error)
+    }
+})
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', (error, user, info) => {
+        if(error) return next(error)
+        if(!user) return res.json({msg : info})
+
+        req.logIn(user, function (error) {
+            if(error) return next(error)
+            res.redirect('/')
+        })
+    })(req, res, next)
 })
 
 // mongoDB 연동
