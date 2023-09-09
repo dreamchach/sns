@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
 const userSchema = mongoose.Schema({
     email : {
         type : String,
@@ -10,7 +11,8 @@ const userSchema = mongoose.Schema({
     },
     googleId : {
         type : String,
-        unique : true
+        unique : true,
+        sparse : true
     }
 })
 
