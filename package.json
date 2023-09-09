@@ -4,7 +4,8 @@
   "description": "- connect-flash 플래쉬 메시지를 위한 미들웨어 모듈 https://www.npmjs.com/package/connect-flash",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.js"
+    "start": "nodemon src/server.js",
+    "production" : "NODE_ENV=production nodemon src/server.js"
   },
   "keywords": [],
   "author": "",

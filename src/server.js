@@ -1,18 +1,22 @@
 const express = require('express')
 const { default: mongoose } = require('mongoose')
 const app = express()
-const port = 4000
+const config = require('config')
+const serverConfig = config.get('server')
+const port = serverConfig.port
 const path = require('path')
 const User = require('./models/users.model')
 const passport = require('passport')
 const cookieSession = require('cookie-session')
 const { checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth')
-const cookieEncryptionKey = 'superSecret-key'
+
 
 // .env 파일 사용
 require('dotenv').config()
 
 // token 생성
+const cookieEncryptionKey = process.env.cookieSession
+
 app.use(cookieSession({
     keys : [cookieEncryptionKey]
 }))
@@ -104,4 +108,5 @@ mongoose.connect(process.env.mongoDB_URI)
 // backend 최초 실행 시 사용되는 함수
 app.listen(port, () => {
     console.log('backend is ready')
+    console.log('port', port)
 })

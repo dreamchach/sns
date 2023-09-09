@@ -80,3 +80,8 @@ app.use(function(request, response, next) {
 1. 'https://console.cloud.google.com/'로 이동
 2. 폴더 '구글 OAuth 등록법' 참조
 - 구글과 mongoDB 연동
+
+## 8. 설정 파일 및 환경변수 생성
+- config 라이브러리를 사용하여 설정 파일을 제어
+- default.json < development.json
+- npm run production과 같이 설정하면 production.json 의 구문이 적용됩니다
