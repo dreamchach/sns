@@ -5,11 +5,10 @@ const config = require('config')
 const serverConfig = config.get('server')
 const port = serverConfig.port
 const path = require('path')
-const User = require('./models/users.model')
 const passport = require('passport')
 const cookieSession = require('cookie-session')
-const { checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth')
-
+const mainRouter = require('./routes/main.router')
+const usersRouter = require('./routes/users.router')
 
 // .env 파일 사용
 require('dotenv').config()
@@ -50,51 +49,9 @@ app.set('view engine', 'ejs')
 // 정적 파일 제공
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
-// ejs파일들 렌더링
-app.get('/login', checkNotAuthenticated, (req, res) => {
-    res.render('login')
-})
-app.get('/signup', checkNotAuthenticated, (req, res) => {
-    res.render('signup')
-})
-app.get('/', checkAuthenticated, (req, res) => {
-    res.render('index')
-})
-
-// api 생성
-app.post('/signup', async(req, res) => {
-    console.log(req.body)
-    
-    const user = new User(req.body)
-    try {
-        await user.save()
-        return res.status(200).send('success')
-    } catch (error) {
-        console.log(error)
-    }
-})
-app.post('/login', (req, res, next) => {
-    passport.authenticate('local', (error, user, info) => {
-        if(error) return next(error)
-        if(!user) return res.json({msg : info})
-
-        req.logIn(user, function (error) {
-            if(error) return next(error)
-            res.redirect('/')
-        })
-    })(req, res, next)
-})
-app.post('/logout', (req, res, next) => {
-    req.logOut(function(error) {
-        if(error) return next(error)
-        res.redirect('/login')
-    })
-})
-app.get('/auth/google', passport.authenticate('google'))
-app.get('/auth/google/callback', passport.authenticate('google', {
-    successReturnToOrRedirect: '/',
-    failureRedirect : '/login'
-}))
+// router
+app.use('/', mainRouter)
+app.use('/auth', usersRouter)
 
 // mongoDB 연동
 mongoose.connect(process.env.mongoDB_URI)

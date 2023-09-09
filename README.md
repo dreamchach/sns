@@ -85,3 +85,5 @@ app.use(function(request, response, next) {
 - config 라이브러리를 사용하여 설정 파일을 제어
 - default.json < development.json
 - npm run production과 같이 설정하면 production.json 의 구문이 적용됩니다
+
+## 9. Router를 이용한 구조정리
