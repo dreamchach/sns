@@ -9,7 +9,11 @@ const passport = require('passport')
 const cookieSession = require('cookie-session')
 const mainRouter = require('./routes/main.router')
 const usersRouter = require('./routes/users.router')
-
+const postsRouter = require('./routes/posts.router')
+const commentsRouter = require('./routes/comments.router')
+const profileRouter = require('./routes/profiles.router')
+const likeRouter = require('./routes/likes.router')
+const friendsRouter = require('./routes/friends.router')
 // .env 파일 사용
 require('dotenv').config()
 
@@ -52,6 +56,11 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 // router
 app.use('/', mainRouter)
 app.use('/auth', usersRouter)
+app.use('/posts', postsRouter)
+app.use('/posts/:id/comments', commentsRouter)
+app.use('/profile/:id', profileRouter)
+app.use('/friends', friendsRouter)
+app.use('/posts/:id/like', likeRouter)
 
 // mongoDB 연동
 mongoose.connect(process.env.mongoDB_URI)

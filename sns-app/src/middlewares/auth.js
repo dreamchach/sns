@@ -9,7 +9,7 @@ function checkAuthenticated(req, res, next) {
 // Public Route
 function checkNotAuthenticated(req, res, next) {
     if(req.isAuthenticated()) {
-        return res.redirect('/')
+        return res.redirect('/posts')
     }
     next()
 }
