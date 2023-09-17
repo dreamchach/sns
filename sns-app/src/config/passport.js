@@ -51,14 +51,18 @@ const googleStrategyConfig = new GoogleStrategy({
     callbackURL : '/auth/google/callback',
     scope: ['email', 'profile']
 }, (accessToken, refreshToken, profile, done) => {
+    console.log(profile)
     User.findOne({googleId : profile.id})
         .then((existingUser) => {
             if(existingUser) {
                 return done(null, existingUser)
             } else {
                 const user = new User()
-                
                 user.email = profile.emails[0].value
+                user.googleId = profile.id,
+                user.username = profile.displayName
+                user.firstName = profile.name.givenName
+                user.lastName = profile.name.familyName
                 user.googleId = profile.id
                 user.save()
                     .then(() => {

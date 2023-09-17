@@ -71,6 +71,12 @@ mongoose.connect(process.env.mongoDB_URI)
         console.log(error)
     })
 
+// express error handling
+app.use((error, req, res, next) => {
+    res.status(error.status || 500)
+    res.send(error.message || 'Error Occurred')
+})
+
 // backend 최초 실행 시 사용되는 함수
 app.listen(port, () => {
     console.log('backend is ready')

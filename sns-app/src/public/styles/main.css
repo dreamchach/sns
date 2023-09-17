@@ -11,3 +11,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.create-post {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+.create-post:hover {
+    background-color: #ddd;
+}
