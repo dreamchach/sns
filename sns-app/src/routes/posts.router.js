@@ -26,7 +26,7 @@ router.post('/', checkAuthenticated, upload, (req, res, next) => {
             id : req.user._id,
             username : req.user.username
         }
-    }).then((post) => res.redirect('back'))
+    }).then(() => res.redirect('back'))
     .catch((error) => next(error))
 })
 
