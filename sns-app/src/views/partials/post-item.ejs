@@ -1,4 +1,37 @@
-<div>
-    나는 post-item.ejs
-    <% post %>
+<div class="card mb-2">
+    <div class="card-body text-start">
+        <div class="d-flex align-items-center">
+            <a href="/profile/<%= post.author.id %>">
+                <h5>
+                    <%= post.author.username %>
+                </h5>
+            </a>
+            <small class="text-muted ms-auto">
+                <%= post.createdAt.toDateString() %>
+            </small>
+            <% if (post.author.id.equals(currentUser._id)) { %>
+                <div class="dropdown">
+                    <button class="no-outline" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/assets/images/ellipsis.png" height="20px" />
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item text-center" href="/posts/<%= post._id %>">Edit</a>
+                        </li>
+                        <li>
+                            <form class="dropdown-item text-center" action="/post/<%= post._id %>?_method=DELETE" method="post">
+                                <button type="submit" class="no-outline">Delete</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            <% } %>
+        </div>
+        <p class="card-text mt-2">
+            <%= post.description %>
+        </p>
+        <% if (post.image) { %>
+            <img class="w-100" src="/assets/images/<%= post.image %>"
+        <% } %>
+    </div>
 </div>

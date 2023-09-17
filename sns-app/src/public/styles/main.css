@@ -22,3 +22,8 @@
 .create-post:hover {
     background-color: #ddd;
 }
+
+.no-outline {
+    background-color: transparent;
+    border-width: 0;
+}
