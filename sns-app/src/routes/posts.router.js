@@ -26,8 +26,14 @@ router.post('/', checkAuthenticated, upload, (req, res, next) => {
             id : req.user._id,
             username : req.user.username
         }
-    }).then(() => res.redirect('back'))
-    .catch((error) => next(error))
+    }).then(() => {
+        req.flash('success', '포스트 생성 성공')
+        res.redirect('back')
+    })
+    .catch((error) => {
+        req.flash('error', '포스트 생성 실패')
+        res.redirect('back')
+    })
 })
 
 router.get('/', checkAuthenticated, (req, res) => {
@@ -37,8 +43,7 @@ router.get('/', checkAuthenticated, (req, res) => {
         .exec()
         .then((posts) => {
             res.render('posts/index', {
-                posts : posts,
-                currentUser : req.user
+                posts : posts
             })
         })
         .catch((error) => console.log(error))

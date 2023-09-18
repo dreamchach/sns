@@ -14,6 +14,8 @@ const commentsRouter = require('./routes/comments.router')
 const profileRouter = require('./routes/profiles.router')
 const likeRouter = require('./routes/likes.router')
 const friendsRouter = require('./routes/friends.router')
+const flash = require('connect-flash')
+
 // .env 파일 사용
 require('dotenv').config()
 
@@ -46,6 +48,9 @@ require('./config/passport')
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 
+// connect-flash 미들웨어에 등록
+app.use(flash())
+
 // ejs 라이브러리와 같이 js를 html로 변환하는 라이브러리를 연동
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -53,6 +58,18 @@ app.set('view engine', 'ejs')
 // 정적 파일 제공
 app.use(express.static(path.join(__dirname, 'public')))
 
+// connect-flash 이용
+app.get('/send', (req, res) => {
+    req.flash('post success', '포스트가 생성되었습니다')
+    res.redirect('/receive')
+})
+app.get('/receive', (req, res) => req.flash('post success')[0])
+app.use((req, res, next) => {
+    res.locals.error = req.flash('error')
+    res.locals.success = req.flash('success')
+    res.locals.currentUser = req.user
+    next()
+})
 // router
 app.use('/', mainRouter)
 app.use('/auth', usersRouter)
