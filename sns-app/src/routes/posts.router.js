@@ -67,4 +67,16 @@ router.put('/:id', checkPostOwnerShip, (req, res) => {
         })
 })
 
+router.delete('/:id', checkPostOwnerShip, (req, res) => {
+    Post.findByIdAndDelete(req.params.id)
+        .then((post) => {
+            req.flash('success', '게시물을 지우는데 성공했습니다')
+            res.redirect('/posts')
+        })
+        .catch((error) => {
+            req.flash('error', '게시물을 지우는데 실패했습니다')
+            res.redirect('/posts')
+        })
+})
+
 module.exports = router
