@@ -1,5 +1,5 @@
 const express = require('express')
-const { checkAuthenticated } = require('../middlewares/auth')
+const { checkAuthenticated, checkPostOwnerShip } = require('../middlewares/auth')
 const router = express.Router()
 const Post = require('../models/posts.model')
 const multer = require('multer')
@@ -47,6 +47,24 @@ router.get('/', checkAuthenticated, (req, res) => {
             })
         })
         .catch((error) => console.log(error))
+})
+
+router.get('/:id/edit', checkPostOwnerShip, (req, res) => {
+    res.render('posts/edit', {
+        post : req.post
+    })
+})
+
+router.put('/:id', checkPostOwnerShip, (req, res) => {
+    Post.findByIdAndUpdate(req.params.id, req.body)
+        .then((post) => {
+            req.flash('success', '게시물 수정을 완료했습니다')
+            res.redirect('/posts')
+        })
+        .catch((error) => {
+            req.flash('error', '게시물을 수정하는데 오류가 발생했습니다')
+            res.redirect('/posts')
+        })
 })
 
 module.exports = router

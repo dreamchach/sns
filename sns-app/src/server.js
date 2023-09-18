@@ -15,6 +15,7 @@ const profileRouter = require('./routes/profiles.router')
 const likeRouter = require('./routes/likes.router')
 const friendsRouter = require('./routes/friends.router')
 const flash = require('connect-flash')
+const methodOverride = require('method-override')
 
 // .env 파일 사용
 require('dotenv').config()
@@ -50,6 +51,9 @@ app.use(express.urlencoded({extended : false}))
 
 // connect-flash 미들웨어에 등록
 app.use(flash())
+
+// method-override 미들웨어 등록
+app.use(methodOverride('_method'))
 
 // ejs 라이브러리와 같이 js를 html로 변환하는 라이브러리를 연동
 app.set('views', path.join(__dirname, 'views'))
