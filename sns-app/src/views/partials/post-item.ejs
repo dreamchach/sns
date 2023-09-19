@@ -35,6 +35,28 @@
             <img class="w-100" src="/assets/images/<%= post.image %>" />
         <% } %>
     
+        <hr class="mt-1"/>
+        <div class="d-flex justify-content-between">
+            <div class="row">
+                <form action="/posts/<%= post._id %>/like?_method=PUT" method="post">
+                    <% if (post.likes.find((like) => like === currentUser._id.toString())) { %>
+                        <button type="submit" class="no-outline">
+                            <img src="/assets/images/full-heart.png" height="20px" />
+                            <span class="ms-1"><%= post.likes.length %></span>
+                        </button>
+                    <% } else {%>
+                        <button type="submit" class="no-outline">
+                            <img src="/assets/images/empty-heart.png" height="20px" />
+                            <span class="ms-1"><%= post.likes.length %></span>
+                        </button>
+                    <% } %>
+                </form>
+            </div>
+            <a class="ms-auto pe-2" data-bs-toggle="collapse" href="#post<%= post._id %>">
+                댓글 <%= post.comments.length %>
+            </a>
+        </div>
+
         <hr class="mt-1" />
         <div class="collapse show" id="post<%= post._id %>">
             <% if (post.comments.length > 0) { %>
