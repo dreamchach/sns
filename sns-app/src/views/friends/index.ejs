@@ -9,7 +9,7 @@
                         아직 친구 요청이 없습니다
                     </div>                    
                 <% } else { %>
-                    <% currentUser.friendRequests.forEach((friendId) => {%>
+                    <% currentUser.friendsRequests.forEach((friendId) => {%>
                         <% const friend = users.find((user) => user._id.toString() === friendId) %>
                         <div class="card" style="border: none;">
                             <div class="card-body">
@@ -21,7 +21,7 @@
                                         <form action="/friends/<%= friend.id %>/accept-friend-request?_method=PUT" method="post" class="me-3">
                                             <button class="btn btn-primary btn-sm" type="submit">친구 추가 요청 수락</button>
                                         </form>
-                                        <form action="/friends/<%= friend.id %>/remove-friend-request?_method=PUT" method="post">
+                                        <form action="/friends/<%= currentUser.id %>/remove-friend-request/<%= friend.id %>?_method=PUT" method="post">
                                             <button class="btn btn-primary btn-sm" type="submit">친구 추가 요청 거절</button>
                                         </form>
                                     </div>
