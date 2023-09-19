@@ -27,3 +27,12 @@
     background-color: transparent;
     border-width: 0;
 }
+
+.comment-section {
+    width: 100%;
+    border: none;
+    padding: 10px 20px;
+    margin: 4px 0;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+}

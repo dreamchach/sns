@@ -1,4 +1,5 @@
 const Post = require('../models/posts.model')
+const Comment = require('../models/comments.model')
 
 // Protected Route
 function checkAuthenticated(req, res, next) {
@@ -43,8 +44,32 @@ function checkPostOwnerShip (req, res, next) {
     }
 }
 
+function checkCommentOwnership(req, res, next) {
+    if(req.isAuthenticated()) {
+        Comment.findById(req.params.commentId)
+            .then((comment) => {
+                if(comment.author.id.equals(req.user._id)) {
+                    req.comment = comment
+                    next()
+                }
+                else {
+                    req.flash('error', '권한이 없습니다')
+                    res.redirect('back')
+                }
+            })
+            .catch((error) => {
+                req.flash('error', '댓글을 찾는 도중에 에러가 발생했습니다')
+                res.redirect('back')
+            })
+    } else {
+        req.flash('error', '로그인을 해주세요')
+        res.redirect('/login')
+    }
+}
+
 module.exports = {
     checkAuthenticated,
     checkNotAuthenticated,
-    checkPostOwnerShip
+    checkPostOwnerShip,
+    checkCommentOwnership
 }

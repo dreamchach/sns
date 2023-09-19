@@ -98,6 +98,11 @@ app.use((error, req, res, next) => {
     res.send(error.message || 'Error Occurred')
 })
 
+// 시작페이지를 login페이지로 redirect
+app.get((req, res) => {
+    console.log('hello world')
+})
+
 // backend 최초 실행 시 사용되는 함수
 app.listen(port, () => {
     console.log('backend is ready')

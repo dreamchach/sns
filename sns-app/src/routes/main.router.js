@@ -3,7 +3,7 @@ const { checkAuthenticated, checkNotAuthenticated } = require('../middlewares/au
 const mainRouter = express.Router()
 
 mainRouter.get('/', checkAuthenticated, (req, res) => {
-    res.render('posts/index')
+    res.redirect('/login')
 })
 mainRouter.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('auth/login')
